@@ -1,0 +1,17 @@
+https://www.youtube.com/watch?v=dPM3POQjyqo&list=PLsvvBhdpMqBzyrmkAAO5zsOwO0wCTU7bj&index=1
+
+
+
+npm init -y           : start a new node js project
+npm install dotenv    : install dotenv package to read .env files
+npm install pg        : install postgres client package 
+npm install sequelize : install orm package for database
+npm install sequelize-cli : install to provide command line interface for sequelize
+
+npx sequelize-cli init   : Generate boilerplate structure for Sequelize.
+                         + This means it will create the folder structures
+                         + in your projects as follows;
+                         + config/
+                         + models/
+                         + migrations/
+                         + seeders/
