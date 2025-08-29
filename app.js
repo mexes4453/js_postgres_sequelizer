@@ -50,17 +50,10 @@ const Todo = sequelize.define("Todo", {
 */
 
 // Synchronise the model with the database
-sequelize.sync()
-.then(()=>{
-    console.log("Database synchronized.");
-})
-.catch(err=>{
-    console.error("Error synchronising the database", err);
-});
-
 
 
 // Example: create a new todo 
+/*>
 Todo.create({
     action: "Programming",
     status: "ongoing"
@@ -71,3 +64,28 @@ Todo.create({
 .catch ( err => {
     console.error("Error creating todo", err);
 })
+*/
+
+
+/*>
+ * ======================================================================
+ * The above section is the first base code that demonstrates the use of
+ * sequelize with postgres. This matches the app.js from the videos 1 & 3
+ * in the series.
+ * Simply uncomment them all to reuse and done in the videos ( 1 , 3 )
+ * The rest of the tutorial will be snapshoted using git tags.
+ * --------------------------------------------------------------------*/
+
+const { User, Post } = require("./models");
+const sequelize = require("./config/database");
+
+/*>
+ * Synchronise all defined models with the database and also create tables
+ * (models) if they do not exist */
+sequelize.sync()
+.then(()=>{
+    console.log("Database synchronized.");
+})
+.catch(err=>{
+    console.error("Error synchronising the database", err);
+});
