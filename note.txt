@@ -7,7 +7,6 @@ npm install dotenv    : install dotenv package to read .env files
 npm install pg        : install postgres client package 
 npm install sequelize : install orm package for database
 npm install sequelize-cli : install to provide command line interface for sequelize
-
 npx sequelize-cli init   : Generate boilerplate structure for Sequelize.
                          + This means it will create the folder structures
                          + in your projects as follows;
@@ -15,3 +14,50 @@ npx sequelize-cli init   : Generate boilerplate structure for Sequelize.
                          + models/
                          + migrations/
                          + seeders/
+
+npm install express     : used to create server to serve clients
+npm install body-parser : A middleware (especially with express) that parses the body
+                        + of incoming HTTP requests and makes it available under 
+                        + req.body. Thus, avoids dealing with raw stream of bytes in
+                        + the body of a request (POST, PUT, PATCH) to handle the
+                        + chunks and decode JSON and form data.
+
+# =====
+# MODEL
+# =====
+Models are database table definition.
+Every model has a controller, route for CRUD operation.
+
+
+# ===========
+# CONTROLLERS
+# ===========
+This contains mainly functions required to create, get, update and delete
+instances of a model (table entries (row)) as required by an application
+
+
+# ======
+# ROUTES
+# ======
+This are path through which a client request is services. The routes links the client request
+to the approriate controller to perform action for the client.
+
+
+# ==========================
+# BROWSER ALTERNATIVE (CURL)
+# ==========================
+
+# Fetch all users
+curl http://localhost:3000/api/users 
+
+# Fetch user by id
+curl http://localhost:3000/api/users/1  
+
+# Post data to server to be stored in database (adding an entry the user model (table) in database).
+curl -X POST http://localhost:3000/api/users/1  -H "Content-Type: application/json"  -d '{"firstName":"Heian","lastName":"sanda", "email": "heian.sanda@karate.de"}'
+
+# Put data to server to be update in database (update an existing entry in the user model (table) in database).
+curl -X PUT http://localhost:3000/api/users/1  -H "Content-Type: application/json"  -d '{"firstName":"Heian","lastName":"sanda", "email": "heian.sanda@karate.de"}'
+
+# Post data server to be deleted in database (delete an existing entry in the user model (table) in database).
+curl -X PUT http://localhost:3000/api/users/1  -H "Content-Type: application/json"  -d '{"firstName":"Heian","lastName":"sanda", "email": "heian.sanda@karate.de"}'
