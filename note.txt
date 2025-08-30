@@ -43,9 +43,9 @@ This are path through which a client request is services. The routes links the c
 to the approriate controller to perform action for the client.
 
 
-# ==========================
-# BROWSER ALTERNATIVE (CURL)
-# ==========================
+# =============================================
+# BROWSER CLIENT ALTERNATIVE ALTERNATIVE (CURL)
+# =============================================
 
 # Fetch all users
 curl http://localhost:3000/api/users 
@@ -61,3 +61,95 @@ curl -X PUT http://localhost:3000/api/users/1  -H "Content-Type: application/jso
 
 # Post data server to be deleted in database (delete an existing entry in the user model (table) in database).
 curl -X PUT http://localhost:3000/api/users/1  -H "Content-Type: application/json"  -d '{"firstName":"Heian","lastName":"sanda", "email": "heian.sanda@karate.de"}'
+
+
+# ==============================================
+# DATABASE TABLE (MODEL) QUERIES WITH SEQUELIZE
+# ==============================================
+const User = require(./models/User)
+
+// Find all Records
+User.findAll()
+.then( (users) => {
+    console.log(users)
+    })
+.catch( err => { console.error(' error ', err)})
+
+
+
+
+// Find Record with Conditions (filters)
+User.findAll({
+    where: {
+        email: a@b.com,
+    }
+})
+.then( (users) => {
+    console.log(users)
+    })
+.catch( err => { console.error(' error ', err)})
+
+
+
+// Find Record with Conditions ( find only one record with given id)
+User.findOne({
+    where: {
+        id: 2,
+    }
+})
+.then( (users) => {
+    console.log(users)
+    })
+.catch( err => { console.error(' error ', err)})
+
+
+
+// Create a new record (row)
+User.create({
+    firstName: 'f',
+    lastName: 'l',
+    email: 'fl@b.com'
+})
+.then( (users) => {
+    console.log('user created ', users)
+    })
+.catch( err => { console.error(' error ', err)})
+
+
+
+
+// update Record with Conditions (filters)
+User.update({
+    firstName: 'fn'
+},
+{
+    where: { id: 1 }
+})
+.then( (users) => {
+    console.log("update successful)
+    })
+.catch( err => { console.error(' error ', err)})
+
+
+
+// Delete Record with Conditions ( find only one record with given id)
+User.destroy({
+    where: {
+        id: 2,
+    }
+})
+.then( (users) => {
+    console.log(users)
+    })
+.catch( err => { console.error(' error ', err)})
+
+
+
+// Using raw sql queries
+const sql = 'SELECT * FROM users WHERE  age > :age';
+sequelize.query(sql, {
+    replacements: {age: 18},
+    type: Sequelize.QueryTypes.SELECT 
+})
+.then ( (result) => { console.log(results); })
+.catch ( (err) => console.error( 'Error: ', err));
