@@ -63,6 +63,7 @@ curl -X PUT http://localhost:3000/api/users/1  -H "Content-Type: application/jso
 curl -X PUT http://localhost:3000/api/users/1  -H "Content-Type: application/json"  -d '{"firstName":"Heian","lastName":"sanda", "email": "heian.sanda@karate.de"}'
 
 
+# v6
 # ==============================================
 # DATABASE TABLE (MODEL) QUERIES WITH SEQUELIZE
 # ==============================================
@@ -153,3 +154,42 @@ sequelize.query(sql, {
 })
 .then ( (result) => { console.log(results); })
 .catch ( (err) => console.error( 'Error: ', err));
+
+
+// v7 : findOne
+// -----------
+// record that matches a set of criteria
+const user = await User.findOne( { where: { firstName: 'john'}})
+
+// v7 : findAll 
+// -----------
+// Retrieve multiple records that matches a set of criteria
+const user = await User.findAll ( { where: { age: { [Sequelize.Op.gt]: 18 }}})
+
+// v7 : findAndCountAll
+// -------------------
+// similar to findAll, it returns the result together with its length. it is useful for pagination.
+const {row, count } = await User.findAndCountAll ( { where: { age: { [Sequelize.Op.gt]: 18 }}})
+
+
+// v7 : findByPk
+// ------------
+// Find a record by its primary key
+const user = await User.findByPk(1); 
+
+
+// v7: findOrCreate
+// ---------------
+// attempts to find a record based on a given criteria and creates it if it does not exist.
+const [user, created] = User.findOrCreate({
+    where: { firstName: 'John' },
+    defaults: { age:30 }
+})
+
+// v7: findOne - with association to other models
+// ----------------------------------------------
+// retrieve associated records of a model with association type (hasMany)
+const user = await User.findOne({
+    where: { username: 'John'},
+    include: [Post] // associate model to queried model.
+})
