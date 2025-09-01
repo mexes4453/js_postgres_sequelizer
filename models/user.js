@@ -22,19 +22,24 @@ const User = sequelize.define("User", {
         type: DataTypes.STRING,
         unique:true,
         allowNull: false,
-        validata: {
+        validate: {
             isEmail: true
+        },
+        set(value){
+            this.setDataValue("email", value.toLowerCase());
         }
     }
 });
 
+
+
 /*>
  * An anonymous functions defined and called at the same time to test
- * the usage of getters, and virtual attribute */
+ * the usage of getters, setter and virtual attribute */
 (async ()=>
 {
+    console.log("TEST (models/user.js) :: GETTER, VIRTUALS, SETTER")
     await sequelize.sync();
-    console.log("TEST_USER: GETTER AND VIRTUALS ")
 
     /*>
      * create a new user and note that the fullname is not provided because
@@ -42,12 +47,19 @@ const User = sequelize.define("User", {
     const user = await User.create({
          firstName: "Gehard",
          lastName: "Jahn",
-         email:"gj@d.com"});
+         email:"Gerhard.Jahn@d.com"});
 
     /*>
      * Attempting to access the virtual attribute (fullName) triggers the call
      * to its getter function defined in the model */
     console.log( user.fullName); 
+
+    /* The email setter will convert the all characters in the email to lower
+     * case before setting it in the database.
+     * Therefore, when the email attribute is accessed. it will print the 
+     * email is lowercase eventhough user provide email that contains upper
+     * case characters.*/
+    console.log( user.email);
 })();
 
 module.exports = User;
