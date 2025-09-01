@@ -193,3 +193,7 @@ const user = await User.findOne({
     where: { username: 'John'},
     include: [Post] // associate model to queried model.
 })
+
+# VIRTUALS
+these are computed properties that are not stored in the database but
+are based on the values of other attributes. 
