@@ -197,3 +197,15 @@ const user = await User.findOne({
 # VIRTUALS
 these are computed properties that are not stored in the database but
 are based on the values of other attributes. 
+
+
+# =============================================================================
+# ASSOCIATIONS BETWEEN MODELS (TABLES)                                        |
+# =============================================================================
+# V13: One-To-One
+# ---------------
+This type of model association specifies the foreign key relationship between 
+two models. For example, Each user has one associated profile and each profile
+belongs to one user. (See ./models/index.js)
+User.hasOne(Profile)
+Profile.belongsTo(User) // Adds the user primary key to the Profile (model) table.
