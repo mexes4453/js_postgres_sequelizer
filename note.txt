@@ -244,3 +244,14 @@ s2: test the association in app.js (with anonymous test function)
 
 
 
+
+# =============================================================================
+# LOAD DATA FROM DATABASE - ADVANCED METHOD (EAGER LOADING)
+# =============================================================================
+This refers to query type that request all the data about a node in a model all
+at ones. this kind of query is complex.
+# --------------------------
+# V18: Eager loading (tut09)
+# --------------------------
+See test function in app.js to see how eager loading is used to request or Fetch
+or query the database by Primarykey with more interested data about the user.

@@ -44,14 +44,38 @@ const sequelize = require("./config/database");
     console.log( todo1.action);
     console.log( todo1.state);
 
-    /* retreive user with associated profile */
+    /* retreive user with associated profile from database */
     const userWithProfile = await User.findOne({
         where: { firstName: 'John'},
-        include: Profile, // Include the associated Profile model for user
-        include: Todo,    // Include the associated Todo model for user
-        include: Student,
+        include: [ 
+            Profile, // Include the associated Profile model for user
+            Todo,    // Include the associated Todo model for user
+            Student, // Include the associated Student model for user
+        ]
     });
     console.log(userWithProfile.toJSON());
+
+    /* Alternative query with more details (eager loading ) */
+    const userWithAllData = await User.findByPk(1, {
+        include: [
+            {
+                model: Profile
+            },
+            {
+                model: Todo,
+                attributes: ['action'], // specify with todo attribute to include
+            },
+            {
+                model: Student,
+                include: [
+                    {
+                        model: Course
+                    }
+                ]
+            }
+        ]
+    });
+    console.log(userWithAllData.toJSON());
 })()
 
 
