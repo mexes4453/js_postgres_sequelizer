@@ -209,3 +209,15 @@ two models. For example, Each user has one associated profile and each profile
 belongs to one user. (See ./models/index.js)
 User.hasOne(Profile)
 Profile.belongsTo(User) // Adds the user primary key to the Profile (model) table.
+
+# ----------------
+# V14: One-To-Many
+# ----------------
+This association type specifies the relationship between a model which has 
+multiple instance of it being associated with only a single instance of 
+another model.
+Example: Each User can have multiple Todo. Therefore, this is achieved by an
+addition of the user primary key in a new column within the todo model (table)
+User.hasMany(Todo)
+Todo.belongsTo(User)
+

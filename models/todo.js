@@ -5,7 +5,7 @@ const Todo = sequelize.define("Todo", {
     action: {
         type: DataTypes.STRING,
     },
-    status: {
+    state: {
         type: DataTypes.STRING,
     },
 });

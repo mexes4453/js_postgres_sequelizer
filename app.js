@@ -1,11 +1,3 @@
-/*>
- * ======================================================================
- * v5: Build the CRUD Rest API with node.js, postgres and sequelize
- * link: https://www.youtube.com/watch?v=AZ6y23ZIe3w&list=PLsvvBhdpMqBzyrmkAAO5zsOwO0wCTU7bj&index=5&pp=iAQB
- * 
- * This section implements the CRUD mechanism require to create, get
- * update and delete entries in a database table (model instances).
- * --------------------------------------------------------------------*/
 
 const express = require('express');
 const bodyParser = require("body-parser");
@@ -26,20 +18,29 @@ const { User, Profile } = require("./models/index");
 const sequelize = require("./config/database");
 
 (async ()=> {
+    /* update all tables in database and create them if they don't exist */
     await sequelize.sync();
-   const user = await User.create({ firstName: "John", lastName: 'doe', email:"jd@pg.com"});
-   const profile = await Profile.create({ address: "pforzheim", sex: 'm'});
 
-   /* Enacting the relationship between the two model instances */
-   await user.setProfile(profile);
+    /* Add rows in to tables ( create instances of models ) */ 
+    const user = await User.create({ firstName: "John", lastName: 'doe', email:"jd@pg.com"});
+    const profile = await Profile.create({ address: "pforzheim", sex: 'm'});
+    const todo1 = await Todo.create( { action: "Do assignment", state: "pending" });
+    const todo2 = await Todo.create( { action: "Take out trash", state: "done" });
+
+    /* Enacting the relationship between the two model instances */
+    await user.setProfile(profile);
+    await user.addTodos( [todo1, todo2] );
 
     console.log( user.fullName); 
     console.log( user.email);
+    console.log( todo1.action);
+    console.log( todo1.state);
 
     /* retreive user with associated profile */
     const userWithProfile = await User.findOne({
         where: { firstName: 'John'},
-        include: Profile, // Include the associated Profile model
+        include: Profile, // Include the associated Profile model for user
+        include: Todo,    // Include the associated Todo model for user
     });
     console.log(userWithProfile.toJSON());
 })()

@@ -52,15 +52,15 @@ module.exports = db;
 
 // models/index.js
 const User = require("./user");
-const Todo = require("./todo");
 const Profile = require("./profile");
+const Todo = require("./todo");
 
 // Define associations between models (tables) if needed
 /* one-to-one : User <-> Profile */
 User.hasOne(Profile) 
 Profile.belongsTo(User)
 
-/* one-to-many : User <-> Todo */
+/* one-to-many : User <-> Todo == See note.txt for explanation */
 User.hasMany(Todo);
 Todo.belongsTo(User);
 
