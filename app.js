@@ -14,7 +14,7 @@ app.use("/api", userRoutes);  // Enable the use of user routes api
 
 
 // Test association
-const { User, Profile, Todo } = require("./models/index");
+const { User, Profile, Todo, Student, Course } = require("./models/index");
 const sequelize = require("./config/database");
 
 (async ()=> {
@@ -26,10 +26,18 @@ const sequelize = require("./config/database");
     const profile = await Profile.create({ address: "pforzheim", sex: 'm'});
     const todo1 = await Todo.create( { action: "Do assignment", state: "pending" });
     const todo2 = await Todo.create( { action: "Take out trash", state: "done" });
+    const student1 = await Student.create( { userName: "mexes"});
+    const student2 = await Student.create( { userName: "gailix"});
+    const course1 = await Course.create( { title: "physics"});
+    const course2 = await Course.create( { title: "maths"});
 
     /* Enacting the relationship between the two model instances */
     await user.setProfile(profile);
     await user.addTodos( [todo1, todo2] );
+    await student1.addCourse( course1 );
+    await student1.addCourse( course2 );
+    await student2.addCourse( course2 );
+    await user.setStudent(student1);
 
     console.log( user.fullName); 
     console.log( user.email);
@@ -41,6 +49,7 @@ const sequelize = require("./config/database");
         where: { firstName: 'John'},
         include: Profile, // Include the associated Profile model for user
         include: Todo,    // Include the associated Todo model for user
+        include: Student,
     });
     console.log(userWithProfile.toJSON());
 })()
