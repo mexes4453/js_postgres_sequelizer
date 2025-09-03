@@ -10,7 +10,18 @@ const sequelize = new Sequelize({
     username: appEnv.DB_USER,
     password: appEnv.DB_PASSWORD,
     host: appEnv.DB_HOST,
-    dialect: "postgres"
+    dialect: "postgres",
+    pool: {
+        max: 5, // Maximum number of connection in the pool
+        min: 1, // Maximum number of connection in the pool 
+
+        /* Maximum time, in milliseconds that a connection can be acquired */
+        acquire: 30000, 
+
+        /* Maximum time, in milliseconds that a connection can be idle before 
+        it is released */
+        idle: 10000, 
+    },
 });
 
 sequelize.authenticate()

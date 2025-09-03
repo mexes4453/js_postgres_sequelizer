@@ -255,3 +255,25 @@ at ones. this kind of query is complex.
 # --------------------------
 See test function in app.js to see how eager loading is used to request or Fetch
 or query the database by Primarykey with more interested data about the user.
+
+
+
+
+
+# =============================================================================
+# CONNECTION POOL NODE WITH SEQUELIZE
+# =============================================================================
+# --------------------------
+# V19 | tut10 | Establish pool connection : 
+# --------------------------
+This deals with having multiple process to manage database connection for 
+query data.
+It is implemented in ./config/database
+The pool can be closed as below
+sequelize.close()
+  .then( ()=> {
+    console.log("connection pool closed")
+  })
+  .catch( (err)=> {
+    console.error("Error closing connection pool ", err);
+  });
