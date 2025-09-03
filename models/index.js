@@ -54,6 +54,8 @@ module.exports = db;
 const User = require("./user");
 const Profile = require("./profile");
 const Todo = require("./todo");
+const Student = require("./student");
+const Course = require("./course");
 
 // Define associations between models (tables) if needed
 /* one-to-one : User <-> Profile */
@@ -64,10 +66,15 @@ Profile.belongsTo(User)
 User.hasMany(Todo);
 Todo.belongsTo(User);
 
+/* many-to-many : Student <-> Course == See note.txt for explanation */
+Student.belongsToMany(Course, { through: "StudentCourse" });
+Course.belongsToMany(Student, { through: "StudentCourse" });
 
 module.exports = {
     User,
     Profile,
-    Todo
+    Todo,
+    Course,
+    Student
     // Export other models here
 };

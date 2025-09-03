@@ -221,3 +221,18 @@ addition of the user primary key in a new column within the todo model (table)
 User.hasMany(Todo)
 Todo.belongsTo(User)
 
+
+# -----------------
+# V15: Many-To-Many
+# -----------------
+This association type establish relationship between a two models where 
+instances of each of them can be found in its counter part model.
+Example: Students and Courses. 
+A student can enroll for multiple courses
+A course can have multiple students enrolled in it.
+s0: create new models (./models/course.js and ./models/student.js)
+s1: import them in ./models/index.js and define their relationship
+s2: test the association in app.js (with anonymous test function)
+
+
+
