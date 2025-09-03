@@ -14,7 +14,7 @@ app.use("/api", userRoutes);  // Enable the use of user routes api
 
 
 // Test association
-const { User, Profile } = require("./models/index");
+const { User, Profile, Todo } = require("./models/index");
 const sequelize = require("./config/database");
 
 (async ()=> {
