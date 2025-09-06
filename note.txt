@@ -333,3 +333,46 @@ s7: execute command
 |-- + -> migration file. But this command executes code in the down section.
 |-- : The option --env is used to selected the credentials from the json object
 |-- + -> listed in the ./config/config.js file.
+
+
+
+# =============================================================================
+# V22 | tut12 | SEEDERS |
+# =============================================================================
+The process of seedings simply means populating a table in a database with 
+actual data (rows in the table) within the columns of the table(model).
+This is performed similarly like migration as follows.
+------
+STEPS 
+------
+S01: Execute command
+|--  $ npx sequelize seed:generate --name <seed_name> : This generates a seed 
+|--  + --> file with the given seed_name where user can define codes to be 
+|--  + --> executed which will add data to the table in database. This file is
+|--  + --> created and stored in the seeder directory. ./seeders/*seed_name.js
+
+S02: Add codes in the newly created seed file in seeder directory to added 
+|--  Content into the database table when executed. Just like migrations. the 
+|--  file contains two sections (up and down). The code added in the up section
+|--  will add contents to the tables in database while those in the down section
+|--  will delete all entries in the specified database table.
+|--  Note that there is not need to add information for attributes (id) specified
+|--  as primary key. The database will handle that automatically.
+
+S03: Execute command
+|-- $ npx sequelize db:seed:all --env development # populate the table(model)
+|-- + -> in database with data from seed files
+|-- : Note that these data were defined in the up section of the newly created 
+|-- + -> seed file. 
+|-- : The option --env is used to selected the credentials from the json object
+|-- + -> listed in the ./config/config.js file.
+|-- Check your database to see that the table now contains entries (rows) in it.
+
+
+S04 : Execute command
+|-- $ npx sequelize db:seed:undo --env development # Deletes all entries (rows)
+|-- + -> in a database table.
+|-- + -> Note that these entries were defined in the up section of the newly created 
+|-- + -> seed file. But this command executes code in the down section.
+|-- : The option --env is used to selected the credentials from the json object
+|-- + -> listed in the ./config/config.js file.
