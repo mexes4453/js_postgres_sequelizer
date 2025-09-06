@@ -6,7 +6,7 @@ npm init -y           : start a new node js project
 npm install dotenv    : install dotenv package to read .env files
 npm install pg        : install postgres client package 
 npm install sequelize : install orm package for database
-npm install sequelize-cli : install to provide command line interface for sequelize
+npm install -g sequelize-cli : install to provide command line interface for sequelize
 npx sequelize-cli init   : Generate boilerplate structure for Sequelize.
                          + This means it will create the folder structures
                          + in your projects as follows;
@@ -277,3 +277,59 @@ sequelize.close()
   .catch( (err)=> {
     console.error("Error closing connection pool ", err);
   });
+
+
+# =============================================================================
+# V21 | tut11 | MIGRATION |
+# =============================================================================
+Migrations are like git commits that creates a scripts which when executed, 
+automates the process of creating and modifying tables (models) in a database.
+The executed actions can also be rolled back to a previous migration just like
+own one uses git commits to roll back changes in a file. Therefore, migrations
+are used as version control. Each migration is named just as how each git commit
+has a commit number and message binded to it.
+Migrations is perform via the sequelize-cli tool.
+-----
+steps
+-----
+s1: install the sequelize-cli package -> npm install -g sequelize-cli
+s2: open a command prompt at the project base directory
+s3: execute command 
+|-- $ npx sequelize-cli init : This command creates folders for migration and 
+                             + -> seeder with base file structure for user to
+                             + -> define the table or models they want to create
+                             + -> in their database.
+
+s4: execute command
+|-- $ npx sequelize migration:create --name <migration_name> # alternative command
+|-- : This will create a new migration file with the given name <migration_name>
+    + -> in the migrations folder of your project. Within this file once can
+    + -> add the commands to create the models (table) in the database just as
+    + -> defined in your ./models/*.js files for your database.
+    : Note that there are two sections within the newly created migration file.
+    + -> (up and down). Model definition should be in the up section and actions to
+    + -> to revert or delete the table should be in the down section.
+
+s5: Rename file ./config/config.json to ./config/config.js. This action is required
+|-- because database credentials in the .json file are hard coded and such
+|-- information should be stored in a .env file which will retrieved using 
+|-- javascript dotenv pkg and populates the json objects that contains the
+|-- the database credentials.
+|-- Note that this object contains credentials for various purpose such as
+|-- Production, test, development which can be selected when making the 
+|-- actual migration.
+
+s6: execute command
+|-- $ npx sequelize db:migrate --env development  # creates the table(model) in db
+|-- + -> Note that these table were defined in the up section of the newly created 
+|-- + -> migration file. Therefore, this command executes code in the up section.
+|-- : The option --env is used to selected the credentials from the json object
+|-- + -> listed in the ./config/config.js file.
+|-- Check your database to see that the table was added.
+
+s7: execute command
+|-- $ npx sequelize db:migrate:undo --env development # Deletes the table from the db
+|-- + -> Note that these table were defined in the up section of the newly created 
+|-- + -> migration file. But this command executes code in the down section.
+|-- : The option --env is used to selected the credentials from the json object
+|-- + -> listed in the ./config/config.js file.
