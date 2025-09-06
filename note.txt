@@ -309,6 +309,7 @@ s4: execute command
     : Note that there are two sections within the newly created migration file.
     + -> (up and down). Model definition should be in the up section and actions to
     + -> to revert or delete the table should be in the down section.
+|-- + -> created and stored in migration directory. ./migrations/*migration_name.js
 
 s5: Rename file ./config/config.json to ./config/config.js. This action is required
 |-- because database credentials in the .json file are hard coded and such
@@ -368,7 +369,6 @@ S03: Execute command
 |-- + -> listed in the ./config/config.js file.
 |-- Check your database to see that the table now contains entries (rows) in it.
 
-
 S04 : Execute command
 |-- $ npx sequelize db:seed:undo --env development # Deletes all entries (rows)
 |-- + -> in a database table.
@@ -376,3 +376,42 @@ S04 : Execute command
 |-- + -> seed file. But this command executes code in the down section.
 |-- : The option --env is used to selected the credentials from the json object
 |-- + -> listed in the ./config/config.js file.
+
+
+
+
+# =============================================================================
+# V32 | tut13 | ADD A NEW COLUMN TO TABLE IN DATABASE - SEQUELIZE-CLI
+# =============================================================================
+This kind of operation can be performed using sequelize-cli migrations as follows
+
+-----
+STEPS
+-----
+S01: Execute command
+|-- $ npx sequelize migration:generate --name <migration_name> # alternative command
+|-- $ npx sequelize migration:generate --name add_col_age_to_users # usage example
+|-- : This will create a new migration file with the given name <migration_name>
+    + -> in the migrations folder of your project. Within this file once can
+    + -> add the commands to add column in the models (table) in the database.
+    + -> "await queryInterface.addColumn(<table_name, <col_name, {contraints})
+    + -> "await queryInterface.addColumn('Users', 'age', {type: Sequelize.INTEGER}) # usage
+    + -> This must be done in the up section of the file.
+    : Note that there are two sections within the newly created migration file.
+    + -> (up and down).
+    + -> To revert the action of the up section the down section is used.
+    + -> "await queryInterface.addColumn(<table_name>, <col_name>)
+    + -> "await queryInterface.removeColumn('Users', 'age') # usage
+    + -> See file in directory ./migrations/*add_col_age_to_users.js
+
+S02: Execute command
+|-- $ npx sequelize db:migrate --env development  # implements the changes in the
+|-- + -> table(model) in database.
+|-- + -> Note that these table were defined in the up section of the newly created 
+|-- + -> migration file. Therefore, this command executes code in the up section.
+|-- : The option --env is used to selected the credentials from the json object
+|-- + -> listed in the ./config/config.js file.
+|-- Check your database to see that the change has been effected in the table. 
+
+
+
