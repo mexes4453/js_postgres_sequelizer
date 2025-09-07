@@ -22,6 +22,9 @@ npm install body-parser : A middleware (especially with express) that parses the
                         + the body of a request (POST, PUT, PATCH) to handle the
                         + chunks and decode JSON and form data.
 
+npm install bcrypt      : used to hash and verify sensitive data  like password.
+npm install jsonwebtoken: used for stateless authentication between client and server.
+
 # =====
 # MODEL
 # =====
@@ -450,3 +453,41 @@ S02: Execute command
 
 
 
+
+# =============================================================================
+# V25 | tut15 | USER AUTHENTICATION WITH POSTGRESQL and NODE JS
+# =============================================================================
+S01: Install new packages for authentication purposes with command below
+|--  $ npm install bcrypt jsonwebtoken 
+
+S0X: Make migration to insert table in the database.
+S0X: Note that pg query to insert data in the table requires that the fields are
+|..  + are case sensitive. Such fields must be wrapped around double quotes.
+|..  + Example: 
+       `INSERT INTO public."Users" ("userName", email, password, "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+
+S0X: REGISTER USER: Make post request to register user into the database and hash user password
+|--  $ curl -X POST http://localhost:8080/register  \
+       -H "Content-Type: application/json"  \
+       -d '{"userName":"jd40","password":"hjz97%$4d", "email": "jd40@karate.de"}'
+|--  : Check that the user was successfully added into the database.
+
+S0X: LOGIN USER: Make post request to login user 
+|--  $ curl -X POST http://localhost:8080/register  \
+       -H "Content-Type: application/json"  \
+       -d '{"password":"hjz97%$4d", "email": "jd40@karate.de"}'
+|--  : Now that the user is registered attempt to login by sending via CURL.
+|--  + withn the above command.
+|--  : Check that the server response with a string of token seperated by dots.
+|--  : attempt to login with wrong credentials to see how the server responds.
+
+
+S0X: FETCH USER INFO: Make get request to retreive user info 
+This is achieved by adding the token received from the server to the request header
+as shown below.
+Note that the token is usually longer than shown below. (below example is for demo)
+|--  $ curl http://localhost:8080/userinfo \
+       -H "Content-Type: application/json" 
+       -H "Authorization: Bearer eyJhbGciOiJIUz.I1NiIsInR.5cCI6IkpXVCJ9"
+|--  : Check that the server response with a user info from server database
+|--  : attempt to login with wrong credentials to see how the server responds.

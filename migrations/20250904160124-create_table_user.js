@@ -1,3 +1,4 @@
+const { attrUser } = require('../models/user');
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
@@ -16,14 +17,7 @@ module.exports = {
             primaryKey: true,
             type: Sequelize.INTEGER
         },
-        firstName: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        lastName: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
+        ...attrUser,
         createdAt: {
             allowNull: false,
             type: Sequelize.DATE

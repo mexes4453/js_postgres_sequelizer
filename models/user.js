@@ -1,15 +1,12 @@
 const { DataTypes } = require("sequelize")
 const sequelize = require("../config/database")
 
-const User = sequelize.define("User", {
-    firstName: {
+const attrUser = {
+    userName: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    lastName: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+/*
     fullName: {
         type:DataTypes.VIRTUAL,  // declare a virtual attribute
         get(){
@@ -18,6 +15,7 @@ const User = sequelize.define("User", {
             return (`${firstName} - ${lastName}`)
         }
     },
+*/
     email: {
         type: DataTypes.STRING,
         unique:true,
@@ -29,13 +27,19 @@ const User = sequelize.define("User", {
             this.setDataValue("email", value.toLowerCase());
         }
     },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     /*
     birthdate:{ // Used to demonstrate virtuals 
         type: DataTypes.DATE
     }*/
+}
 
-},
-{
+
+
+const User = sequelize.define("User", attrUser, {
     sequelize,
     modelName: "User"
 });
@@ -50,4 +54,4 @@ User.prototype.getAge = function(){
 }
 */
 
-module.exports = User;
+module.exports = { attrUser, User};
