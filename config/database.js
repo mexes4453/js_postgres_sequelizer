@@ -28,6 +28,10 @@ sequelize.authenticate()
 .then(()=> {
     console.log( "Database connection successful.");
 })
+.then( async ()=> {
+       await sequelize.sync();
+       console.log("database sync ==> Done");
+})
 .catch( err => {
     console.error("Unable to connect to the database", err);
 });

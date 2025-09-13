@@ -472,25 +472,15 @@ S0X: REGISTER USER: Make post request to register user into the database and has
        -H "Content-Type: application/json"  \
        -d '{"userName":"jd40","password":"hjz97%$4d", "email": "jd40@karate.de"}'
 |--  : Check that the user was successfully added into the database.
-|--  : The application file (app.js) has been cleanedup in final version and 
-|--  +-- therefore the new client curl request is as below.
-|--  +-- $ curl -X POST http://localhost:8080/api/users/register  \
-         -H "Content-Type: application/json"  \
-         -d '{"userName":"jd40","password":"hjz97%$4d", "email": "jd40@karate.de"}'
 
 S0X: LOGIN USER: Make post request to login user 
-|--  $ curl -X POST http://localhost:8080/login  \
+|--  $ curl -X POST http://localhost:8080/register  \
        -H "Content-Type: application/json"  \
        -d '{"password":"hjz97%$4d", "email": "jd40@karate.de"}'
 |--  : Now that the user is registered attempt to login by sending via CURL.
 |--  + withn the above command.
 |--  : Check that the server response with a string of token seperated by dots.
 |--  : attempt to login with wrong credentials to see how the server responds.
-|--  : The application file (app.js) has been cleanedup in final version and 
-|--  +-- therefore the new client curl request is as below.
-|--  +-- $ curl -X POST http://localhost:8080/api/users/login  \
-           -H "Content-Type: application/json"  \
-           -d '{"password":"hjz97%$4d", "email": "jd40@karate.de"}'
 
 
 S0X: FETCH USER INFO: Make get request to retreive user info 
@@ -502,11 +492,6 @@ Note that the token is usually longer than shown below. (below example is for de
        -H "Authorization: Bearer eyJhbGciOiJIUz.I1NiIsInR.5cCI6IkpXVCJ9"
 |--  : Check that the server response with a user info from server database
 |--  : attempt to login with wrong credentials to see how the server responds.
-|--  : The application file (app.js) has been cleanedup in final version and 
-|--  +-- therefore the new client curl request is as below.
-|--  +-- $ curl http://localhost:8080/api/users/info \
-           -H "Content-Type: application/json"  \
-           -d '{"password":"hjz97%$4d", "email": "jd40@karate.de"}'
 
 
 
@@ -520,7 +505,7 @@ steps
 -----
 S00 : Create a new database model for File (./models/file.js) just like todo.js
 S01 : Install package -> npm install multer
-S02 : include the packages (multer, path) in app.js file
+S02 : include the package in app.js file .
 S03 : Ensure that the database is synced using sequelize (app.js)
 s04 : (app.js) Multer -> create a storage instance. Which defines where the store 
 |.. + - uploaded files and the original file name. 
@@ -533,23 +518,7 @@ s04 : (app.js) Multer -> create an upload instance with the created storage inst
 s05 : (app.js) Define routes (POST & GET) to upload a file and to fetch the 
 |.. + - file information
 
-S06 : Test the application for file upload by sending POST request with curl.
-|.. + - as shown below
-| Goal                            | Command                            |
-| ------------------------------- | ---------------------------------- |
-| Upload as `multipart/form-data` | `curl -F "file=@file.txt" URL`     |
-| Upload as raw binary            | `curl --data-binary @file.txt URL` |
-Testcase:01 $ curl -X POST -F "filename=@note.txt"   https://localhost:8080/upload
-Testcase:02 $ curl  http://localhost:8080/file/1
-|.. Testcase01 was successful as the upload file (note.txt) was found in directory.
-|.. Testcase02 was successful as the uploaded file (note.txt) was fetched back
-
-S07 : cleaned up the app.js file. create controller and routes for file upload.
-S07 : cleaned up the app.js file. moved extra routes for user.
-|.. +-- user routes (register, login and info) to routesUser file.
-|.. +-- user controllers (register, login and info) to controllersUser file.
-
-
+:todo create db model for file and test the application for file upload.
 
 
 

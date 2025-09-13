@@ -1,10 +1,22 @@
-const { User } = require("../models/user")
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const pg = require("pg");
-
 require('dotenv').config(); // Load .env
 const appEnv = process.env;
+const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const bodyParser = require("body-parser");
+const userRoutes = require('./routes/routesUser');
+const fileRoutes = require('./routes/routesFile');
+const pg = require("pg");
+
+
+const app = express();
+
+// Middleware activation
+app.use(bodyParser.json());   // Enable the use of body parser
+app.use("/api", userRoutes);  // Enable the use of user routes api
+app.use("/"   , fileRoutes);  // Enable the use of file routes api
+app.use(express.json());
+
 
 // create a postgres db connection instance.
 const pool = new pg.Pool({
@@ -15,130 +27,10 @@ const pool = new pg.Pool({
     database: appEnv.DB_NAME,
 });
 
-/*>
- * Create a new user */
-async function createUser( req, res)
-{
-    try
-    {
-        const { firstName, lastName, email } = req.body;
-        const user = await User.create( { firstName, lastName, email });
-        res.status(201).json(user);
-    }
-    catch (err)
-    {
-        console.error("Error creating user:", err);
-        res.status(500).json( { error: "Internal Server Error"});
-    }
-}
 
-
-
-
-/*>
- * Get all users */
-async function getUsers(req, res)
-{
-    try
-    {
-        const users = await User.findAll();
-        res.status(200).json(users);
-    }
-    catch (error)
-    {
-        console.error("Error fetching users;", error);
-        res.status(500).json( { error: "Internal Server Error"});
-    }
-}
-
-
-
-/*>
- * Get a user by ID */
-async function getUserById(req, res)
-{
-    const userId = req.params.id;
-    try
-    {
-        const user = await User.findByPk(userId);
-        if (!user)
-        {
-            res.status(404).json({ error: 'User not found'});
-        }
-        else
-        {
-            res.status(200).json(user);
-        }
-    }
-    catch (error)
-    {
-        console.error('Error fetching user:', error);
-        res.status(500).json( {error: 'Internal Server Error'});
-    }
-}
-
-
-
-/*>
- * Update a user by ID */
-async function updateUserById(req, res)
-{
-    const userId = req.params.id;
-    
-    try
-    {
-        const user = await User.findByPk(userId);
-        if (!user)
-        {
-           res.status(404).json( { error: "User not found"});
-        }
-        else
-        {
-            const { firstName, lastName, email } = req.body;
-            user.firstName = firstName;
-            user.lastName = lastName;
-            user.email = email;
-            await user.save();
-            res.status(200).json(user);
-        }
-    }
-    catch (err)
-    {
-        console.error("Error updating user:", err);
-        res.status(500).json( { error: "Internal Server Error"});
-    }
-}
-
-
-
-
-// Delete a user by ID 
-async function deleteUserById(req, res)
-{
-    const userId = req.params.id;
-    try
-    {
-        const user = await User.findByPk(userId);
-        if (!user)
-        {
-            res.status(404).json( { error: "User not found"});
-        }
-        else
-        {
-            await user.destroy();
-            res.status(204).end(); // no content response
-        }
-    }
-    catch (error)
-    {
-        console.error("Error deleting user:", error);
-        res.status(500).json( {errror:"Internal Server Error"});
-    }
-}
-
+// Routes for application 
 // user registration 
-async function registerUser(req, res)
-{
+app.post("/register", async(req, res) => {
     console.log("== [ post::register ] == ");
     try
     {
@@ -164,14 +56,13 @@ async function registerUser(req, res)
         console.error( error.message);
         res.status(500).send("Server Error");
     }
-}
+})
 
 
 
 
 // user login
-async function loginUser (req, res)
-{
+app.post("/login", async (req, res) => {
     console.log("== [ post::login ] == ");
     try
     {
@@ -205,7 +96,7 @@ async function loginUser (req, res)
         console.error (error.message);
         res.status(500).send("Server Error")
     }
-}
+})
 
 
 
@@ -236,23 +127,18 @@ function verifyToken( req, res, next)
 
 
 // Protected Route for user information
-function getUserInfoById (req, res)
-{
+app.get("/userinfo", verifyToken, (req, res) => {
     console.log("== [ get::userinfo ] == ");
     res.json({user: req.user });
-}
+})
 
 
 
-module.exports = {
-    createUser,
-    getUsers,
-    getUserById,
-    updateUserById,
-    deleteUserById,
-	registerUser,
-	loginUser,
-	verifyToken,
-    getUserInfoById 
 
-};
+
+
+// Start the server 
+const port = appEnv.SERVER_PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});

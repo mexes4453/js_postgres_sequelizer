@@ -51,11 +51,13 @@ module.exports = db;
 
 
 // models/index.js
-const User = require("./user");
+const { User }= require("./user");
 const Profile = require("./profile");
 const Todo = require("./todo");
 const Student = require("./student");
 const Course = require("./course");
+const File = require("./file");
+const sequelize = require("../config/database");
 
 // Define associations between models (tables) if needed
 /* one-to-one : User <-> Profile */
@@ -79,7 +81,6 @@ User.hasOne(Student);
 Student.belongsTo(User);
 
 // Test association
-const sequelize = require("./config/database");
 
 async function testDB(){
     /* update all tables in database and create them if they don't exist */
@@ -148,6 +149,8 @@ module.exports = {
     Todo,
     Course,
     Student,
+	File,
+	sequelize,
     testDB
     // Export other models here
 };
